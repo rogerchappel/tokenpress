@@ -31,7 +31,7 @@ export function isDecisionLine(line: string): boolean {
 }
 
 export function extractPaths(line: string): string[] {
-  const matches = line.match(/(?:\.{0,2}\/|~\/|[A-Za-z]:\\|\/)[\w@./\\:=-]+/g) ?? [];
+  const matches = line.match(/(?<![A-Za-z0-9])(?:\.{1,2}\/|~\/|[A-Za-z]:\\|\/|[A-Za-z0-9_.-]+\/)[\w@./\\:=-]+/g) ?? [];
   return matches.map((value) => value.replace(/[),.;]+$/g, ""));
 }
 
