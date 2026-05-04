@@ -6,6 +6,7 @@ export interface PressOptions {
   maxEvidenceLines?: number;
   redactSecrets?: boolean;
   cwd?: string;
+  includePathEvidence?: boolean;
 }
 
 export interface EvidenceLine {

@@ -49,7 +49,11 @@ export function pressTranscript(input: string, options: PressOptions = {}): Pres
       evidenceLines.push(item);
     }
 
-    paths.push(...extractPaths(text));
+    const foundPaths = extractPaths(text);
+    paths.push(...foundPaths);
+    if (options.includePathEvidence === true && foundPaths.length > 0) {
+      evidenceLines.push(evidence(lineNumber, text, "path", scoreReason("path")));
+    }
   });
 
   const maxEvidence = options.maxEvidenceLines ?? 40;
