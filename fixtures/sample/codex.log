@@ -1,0 +1,5 @@
+codex reasoning: inspect failing fixture
+> pnpm test
+FAIL tests/parser.test.ts
+panic: fixture path ./fixtures/sample/transcript.log missing
+therefore choose deterministic local fixtures before adding adapters

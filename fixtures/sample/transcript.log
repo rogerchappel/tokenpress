@@ -1,0 +1,13 @@
+[10:02:01] Starting OpenClaw worker for repo /Users/roger/dev/demo
+$ npm test
+> demo@0.1.0 test
+> node --test
+✔ parser keeps command lines
+✖ cli smoke
+Error: expected report at ./out/tokenpress.md
+Command exited with code 1
+Decision: keep V1 local-first and write markdown/json only.
+$ npm run build
+src/cli.ts:12:7 - error TS2322: Type 'string' is not assignable to type 'OutputFormat'.
+TODO: preserve /tmp/demo/transcript.log and docs/PRD.md references.
+api_key=abc123SHOULDREDACT
