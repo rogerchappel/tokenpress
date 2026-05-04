@@ -1,7 +1,7 @@
 import type { AdapterName } from "./types.js";
 
 const COMMAND_PATTERNS = [
-  /^\s*[$❯>]\s+(.+)$/,
+  /^\s*[$❯]\s+(.+)$/,
   /^\s*(?:\w+[\w.-]*@[^\s]+\s+)?[^\n]*[#$]\s+(.+)$/,
   /^\s*(?:command|cmd|shell)\s*[:>]\s*(.+)$/i
 ];

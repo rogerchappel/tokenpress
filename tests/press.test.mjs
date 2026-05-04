@@ -16,7 +16,7 @@ test("pressTranscript preserves commands, errors, paths, and decisions", async (
 });
 
 test("pressTranscript redacts secret-looking values by default", () => {
-  const result = pressTranscript("$ deploy\napi_key=supersecretvalue\nError: nope");
+  const result = pressTranscript("$ deploy\nError: api_key=supersecretvalue");
   assert.match(JSON.stringify(result), /\[redacted-secret\]/);
   assert.doesNotMatch(JSON.stringify(result), /supersecretvalue/);
 });
