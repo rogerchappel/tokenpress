@@ -28,3 +28,9 @@ test("renderMarkdown includes report sections", async () => {
   assert.match(markdown, /## Commands/);
   assert.match(markdown, /## Evidence/);
 });
+
+
+test("optional path evidence keeps path-only lines", () => {
+  const result = pressTranscript("plain line\nsee /tmp/tokenpress/report.md for output", { includePathEvidence: true });
+  assert.ok(result.evidence.some((line) => line.reason === "path"));
+});
