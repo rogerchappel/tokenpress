@@ -1,5 +1,6 @@
 import { detectAdapter, extractCommand, extractExitCode, extractPaths, isDecisionLine, isErrorLine } from "./detect.js";
 import { redactLine } from "./redact.js";
+import { scoreReason } from "./score.js";
 import type { CommandBlock, EvidenceLine, PressedTranscript, PressOptions } from "./types.js";
 
 function uniq(values: string[]): string[] {
@@ -27,7 +28,7 @@ export function pressTranscript(input: string, options: PressOptions = {}): Pres
     if (command) {
       const block: CommandBlock = { lineNumber, command, nearbyErrors: [] };
       commands.push(block);
-      evidenceLines.push(evidence(lineNumber, text, "command", 100));
+      evidenceLines.push(evidence(lineNumber, text, "command", scoreReason("command")));
     }
 
     const exitCode = extractExitCode(text);
@@ -36,14 +37,14 @@ export function pressTranscript(input: string, options: PressOptions = {}): Pres
     }
 
     if (isErrorLine(text)) {
-      const item = evidence(lineNumber, text, "error", 95);
+      const item = evidence(lineNumber, text, "error", scoreReason("error"));
       errors.push(item);
       evidenceLines.push(item);
       if (commands.length > 0) commands[commands.length - 1]!.nearbyErrors.push(item);
     }
 
     if (isDecisionLine(text)) {
-      const item = evidence(lineNumber, text, "decision", 80);
+      const item = evidence(lineNumber, text, "decision", scoreReason("decision"));
       decisions.push(item);
       evidenceLines.push(item);
     }
