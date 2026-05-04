@@ -63,8 +63,9 @@ function parseArgs(argv: string[]): CliOptions | "help" | "version" {
       continue;
     }
     if (arg === "--output" || arg === "-o") {
-      options.output = args.shift();
-      if (!options.output) throw new Error(`${arg} requires a path`);
+      const value = args.shift();
+      if (!value) throw new Error(`${arg} requires a path`);
+      options.output = value;
       continue;
     }
     if (arg === "--max-lines") {
