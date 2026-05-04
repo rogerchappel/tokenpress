@@ -1,0 +1,26 @@
+{
+  "name": "tokenpress",
+  "version": 1,
+  "localFirst": true,
+  "networkRequired": false,
+  "commands": {
+    "check": "npm run check",
+    "test": "npm test",
+    "build": "npm run build",
+    "smoke": "npm run smoke",
+    "validate": "bash scripts/validate.sh"
+  },
+  "fixtures": [
+    "fixtures/sample/transcript.log",
+    "fixtures/sample/codex.log"
+  ],
+  "outputs": [
+    "markdown",
+    "json"
+  ],
+  "safety": {
+    "redactSecretsByDefault": true,
+    "telemetry": false,
+    "hiddenNetworkCalls": false
+  }
+}
