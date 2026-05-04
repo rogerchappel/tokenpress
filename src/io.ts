@@ -1,5 +1,5 @@
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
-import { basename, extname, join } from "node:path";
+import { basename, dirname, extname, join } from "node:path";
 import type { OutputFormat } from "./types.js";
 
 export async function readInput(path?: string): Promise<string> {
@@ -32,10 +32,7 @@ export async function writeOutput(target: string | undefined, format: OutputForm
   const extension = format === "json" ? ".json" : ".md";
   const looksLikeFile = extname(target) !== "" || basename(target).includes(".");
   const filePath = looksLikeFile ? target : join(target, `tokenpress${extension}`);
-  await mkdir(join(filePath, ".."), { recursive: true }).catch(async () => {
-    await mkdir(target, { recursive: true });
-  });
-  if (!looksLikeFile) await mkdir(target, { recursive: true });
+  await mkdir(looksLikeFile ? dirname(filePath) : target, { recursive: true });
   await writeFile(filePath, content, "utf8");
   return filePath;
 }
