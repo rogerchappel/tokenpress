@@ -11,6 +11,7 @@ interface CliOptions {
   adapter: AdapterName;
   maxEvidenceLines: number;
   redactSecrets: boolean;
+  includePathEvidence: boolean;
 }
 
 const HELP = `TokenPress — squeeze noisy terminal logs into evidence-preserving context blocks.
@@ -29,6 +30,7 @@ Options:
   --format markdown|json              Output format (default: markdown)
   --output, -o <path>                 Write report to a file or directory
   --max-lines <number>                Max evidence lines to keep (default: 40)
+  --path-evidence                     Include path-only lines in evidence
   --no-redact                         Keep secrets visible (not recommended)
   --help, -h                          Show help
   --version, -v                       Show version
@@ -41,13 +43,17 @@ function readVersion(): string {
 function parseArgs(argv: string[]): CliOptions | "help" | "version" {
   const args = [...argv];
   if (args[0] === "inspect") args.shift();
-  const options: CliOptions = { format: "markdown", adapter: "auto", maxEvidenceLines: 40, redactSecrets: true };
+  const options: CliOptions = { format: "markdown", adapter: "auto", maxEvidenceLines: 40, redactSecrets: true, includePathEvidence: false };
   while (args.length > 0) {
     const arg = args.shift()!;
     if (arg === "--help" || arg === "-h") return "help";
     if (arg === "--version" || arg === "-v") return "version";
     if (arg === "--no-redact") {
       options.redactSecrets = false;
+      continue;
+    }
+    if (arg === "--path-evidence") {
+      options.includePathEvidence = true;
       continue;
     }
     if (arg === "--format") {
@@ -96,7 +102,8 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
     const result = pressTranscript(input, {
       adapter: parsed.adapter,
       maxEvidenceLines: parsed.maxEvidenceLines,
-      redactSecrets: parsed.redactSecrets
+      redactSecrets: parsed.redactSecrets,
+      includePathEvidence: parsed.includePathEvidence
     });
     const rendered = parsed.format === "json" ? renderJson(result) : renderMarkdown(result);
     const outputPath = await writeOutput(parsed.output, parsed.format, rendered);
