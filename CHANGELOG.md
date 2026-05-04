@@ -1,21 +1,11 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 0.1.0 - Unreleased
 
-This project follows the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
-format and uses semantic versioning when versioned releases are published.
-
-## [Unreleased]
-
-### Added
-
-- Initial project setup.
-
-## Release Links
-
-- Unreleased:
-  `https://github.com/rogerchappel/tokenpress/compare/...HEAD`
-- Latest release:
-  `https://github.com/rogerchappel/tokenpress/releases/latest`
-
-Replace placeholder links once the first release tag exists.
+- Add local-first `tokenpress inspect` CLI.
+- Add deterministic transcript pressing library API.
+- Preserve commands, errors, paths, decisions, and ranked evidence.
+- Emit Markdown and JSON reports.
+- Add OpenClaw, Codex, and plain transcript adapter hints.
+- Redact common secret-looking values by default.
+- Add fixture-backed tests, smoke script, and validation docs.
