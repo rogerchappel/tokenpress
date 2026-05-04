@@ -1,58 +1,27 @@
 # Security Policy
 
-## Supported Versions
+TokenPress is local-first tooling for terminal transcripts. It should never require credentials, network access, or private services to run.
 
-Replace this section with the supported versions for `tokenpress`.
+## Supported versions
 
-Example:
+Security fixes target the current `main` branch until the first tagged release. After `v1.0.0`, supported ranges will be listed here.
 
-```md
-| Version | Supported |
-| --- | --- |
-| .x | Yes |
-| < .0 | No |
-```
+## Reporting a vulnerability
 
-If the project does not publish versioned releases yet, say that clearly.
+Please open a private GitHub security advisory for `rogerchappel/tokenpress`, or contact the maintainer through GitHub if advisories are unavailable.
 
-## Reporting a Vulnerability
+Include:
 
-Please do not report suspected vulnerabilities in public issues, pull requests, or discussions.
+- TokenPress version or commit SHA
+- Operating system and Node.js version
+- Minimal local transcript that reproduces the issue
+- Whether secrets were exposed despite default redaction
 
-Ask maintainers for the private security reporting path before sharing details.
+## Security boundaries
 
-If no private reporting path exists yet, ask maintainers through public project channels for a private reporting path. Do not include exploit details, secrets, personal data, or sensitive technical details in public messages.
+- No telemetry or hidden network calls.
+- No execution of commands found inside transcripts.
+- No recursive filesystem scan unless explicitly added in a future reviewed release.
+- Default redaction for common token, API key, password, authorization, and email patterns.
 
-## What to Include
-
-When a private reporting path is available, include:
-
-- A clear description of the issue.
-- Affected versions, files, packages, workflows, or configuration.
-- Steps to reproduce, proof of concept, or attack scenario when safe to share.
-- Potential impact.
-- Suggested mitigation, if known.
-
-## Response Expectations
-
-Maintainers review good-faith reports as capacity allows.
-
-Do not imply paid support, guaranteed response times, guaranteed fixes, or service-level agreements unless `tokenpress` explicitly provides them.
-
-## Scope
-
-In scope:
-
-- Vulnerabilities in tokenpress.
-- Insecure default configuration shipped by this project.
-- CI, release, or dependency guidance maintained by this project.
-
-Out of scope:
-
-- General support requests.
-- Requests for guaranteed maintenance timelines.
-- Issues in unrelated downstream projects.
-
-## Disclosure
-
-Coordinate disclosure with maintainers before publishing vulnerability details.
+`--no-redact` disables redaction and should only be used for private local debugging.
