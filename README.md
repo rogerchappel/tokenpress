@@ -60,9 +60,10 @@ Options:
 - `--format markdown|json` — report format; default is `markdown`.
 - `--output, -o <path>` — write to a file or directory.
 - `--max-lines <number>` — cap retained evidence lines.
+- `--path-evidence` — keep lines that only mention relevant paths.
 - `--no-redact` — keep secrets visible; useful only for private local debugging.
 
-Directory inputs look for `transcript.log`, `transcript.txt`, `sample.log`, or `sample.txt`.
+Directory inputs look for `transcript.log`, `transcript.txt`, `sample.log`, or `sample.txt`. See `docs/adapters.md` for adapter details.
 
 ## Library
 
