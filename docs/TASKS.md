@@ -7,10 +7,17 @@
 - [x] Preserve commands, errors, file paths, and decision lines as evidence.
 - [x] Emit compact Markdown and JSON reports.
 - [x] Include OpenClaw/Codex/plain adapter detection.
-- [x] Redact common secret-looking values by default.
-- [x] Add fixture-backed library and CLI tests.
+- [x] Redact common secret-looking values by default, including bearer/AWS/npm tokens.
+- [x] Add fixture-backed library and CLI tests for parsing, redaction, rendering, and directory input.
 - [x] Add a real CLI smoke script.
 - [x] Document safety boundaries and source inspiration attribution.
+
+## Release readiness
+
+- [x] `npm run release:check` passes locally.
+- [x] `bash scripts/validate.sh` passes locally.
+- [x] Real CLI fixture smoke writes Markdown output.
+- [x] GitHub description/topics configured for discovery.
 
 ## Follow-up backlog
 

@@ -12,7 +12,7 @@ TokenPress is intentionally boring to run: one local CLI, deterministic fixtures
 ## Safety boundaries
 
 - TokenPress reads only the paths explicitly provided by the user.
-- TokenPress redacts common secret-looking tokens by default.
+- TokenPress redacts common secret-looking tokens by default, including bearer values, AWS access keys, npm tokens, emails, and key/value secrets.
 - TokenPress never phones home, publishes reports, shells out, or uploads logs.
 - `--no-redact` exists for local debugging only and should not be used in shared reports.
 
@@ -21,3 +21,4 @@ TokenPress is intentionally boring to run: one local CLI, deterministic fixtures
 - `npm run release:check`
 - `bash scripts/validate.sh`
 - Manual smoke: `node dist/cli.js inspect fixtures/sample --output /tmp/tokenpress-real-smoke`
+- Real fixture smoke: `node dist/cli.js fixtures/sample/transcript.log --format json >/tmp/tokenpress-fixture.json`

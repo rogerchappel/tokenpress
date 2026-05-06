@@ -8,11 +8,14 @@
     "test": "npm test",
     "build": "npm run build",
     "smoke": "npm run smoke",
-    "validate": "bash scripts/validate.sh"
+    "validate": "bash scripts/validate.sh",
+    "releaseCheck": "npm run release:check",
+    "realFixtureSmoke": "node dist/cli.js fixtures/sample/transcript.log --format json >/tmp/tokenpress-fixture.json"
   },
   "fixtures": [
     "fixtures/sample/transcript.log",
-    "fixtures/sample/codex.log"
+    "fixtures/sample/codex.log",
+    "fixtures/sample/agent-session.log"
   ],
   "outputs": [
     "markdown",
@@ -21,6 +24,20 @@
   "safety": {
     "redactSecretsByDefault": true,
     "telemetry": false,
-    "hiddenNetworkCalls": false
-  }
+    "hiddenNetworkCalls": false,
+    "redactionCoverage": [
+      "tokens",
+      "bearer",
+      "aws-access-key",
+      "npm-token",
+      "email",
+      "key-value-secret"
+    ]
+  },
+  "releaseGates": [
+    "npm run release:check",
+    "bash scripts/validate.sh",
+    "real CLI fixture smoke",
+    "npm pack --dry-run"
+  ]
 }
