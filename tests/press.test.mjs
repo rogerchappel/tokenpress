@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { pressTranscript, renderMarkdown } from "../dist/index.js";
+import { pressTranscript, redactLine, renderMarkdown } from "../dist/index.js";
 
 test("pressTranscript preserves commands, errors, paths, and decisions", async () => {
   const input = await readFile("fixtures/sample/transcript.log", "utf8");
@@ -45,4 +45,13 @@ test("evidence ranking avoids exact duplicate evidence entries", () => {
   const result = pressTranscript("$ npm test\nError: failed because ./out/report.md was missing", { includePathEvidence: true });
   const keys = result.evidence.map((line) => `${line.lineNumber}:${line.reason}:${line.text}`);
   assert.equal(new Set(keys).size, keys.length);
+});
+
+
+test("redaction covers common cloud and package tokens", () => {
+  const redacted = redactLine("Authorization: Bearer abcdefghijklmnopqrstuvwxyz123456 AWS=AKIA1234567890ABCDEF npm_token=npm_abcdefghijklmnopqrstuvwxyz123456");
+  assert.match(redacted, /\[redacted-bearer\]/);
+  assert.match(redacted, /\[redacted-aws-key\]/);
+  assert.match(redacted, /\[redacted-npm-token\]/);
+  assert.doesNotMatch(redacted, /AKIA1234567890ABCDEF/);
 });
