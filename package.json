@@ -43,5 +43,15 @@
   "devDependencies": {
     "@types/node": "^22.10.2",
     "typescript": "^5.7.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rogerchappel/tokenpress.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rogerchappel/tokenpress/issues"
+  },
+  "homepage": "https://github.com/rogerchappel/tokenpress#readme",
+  "sideEffects": false,
+  "packageManager": "npm@11.6.2"
 }
