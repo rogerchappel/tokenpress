@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -31,4 +31,18 @@ test("cli emits json to stdout", () => {
   assert.equal(result.status, 0, result.stderr);
   const parsed = JSON.parse(result.stdout);
   assert.equal(parsed.adapter, "codex");
+});
+
+
+test("cli accepts directory inputs with a generic log file", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "tokenpress-generic-"));
+  try {
+    await writeFile(join(dir, "agent-session.log"), "$ npm test\nCommand exited with code 1\nError: boom", "utf8");
+    const result = spawnSync(process.execPath, [...cli, dir, "--format", "json"], { encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    const parsed = JSON.parse(result.stdout);
+    assert.equal(parsed.summary.failedCommands, 1);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
 });

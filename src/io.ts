@@ -1,4 +1,4 @@
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 import { basename, dirname, extname, join } from "node:path";
 import type { OutputFormat } from "./types.js";
 
@@ -22,7 +22,10 @@ export async function readInput(path?: string): Promise<string> {
         // try next fixture-like name
       }
     }
-    throw new Error(`Directory input needs one of: ${candidates.join(", ")}`);
+    const entries = await readdir(path);
+    const fallback = entries.filter((entry) => /\.(?:log|txt)$/i.test(entry)).sort()[0];
+    if (fallback) return readFile(join(path, fallback), "utf8");
+    throw new Error(`Directory input needs one of: ${candidates.join(", ")} or any .log/.txt file`);
   }
   return readFile(path, "utf8");
 }
