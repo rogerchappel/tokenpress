@@ -1,0 +1,6 @@
+[06:30] cwd /Users/roger/dev/tokenpress
+$ npm run release:check
+Command exited with code 1
+Error: missing SECURITY.md
+Decision: keep the project local-first and add safety docs before release.
+Next step: run bash scripts/validate.sh after docs are fixed.

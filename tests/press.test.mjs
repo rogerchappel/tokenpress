@@ -55,3 +55,12 @@ test("redaction covers common cloud and package tokens", () => {
   assert.match(redacted, /\[redacted-npm-token\]/);
   assert.doesNotMatch(redacted, /AKIA1234567890ABCDEF/);
 });
+
+
+test("agent-session fixture captures failed command and decision", async () => {
+  const input = await readFile("fixtures/sample/agent-session.log", "utf8");
+  const result = pressTranscript(input);
+  assert.equal(result.summary.failedCommands, 1);
+  assert.ok(result.decisions.some((line) => line.text.includes("local-first")));
+  assert.ok(result.paths.includes("/Users/roger/dev/tokenpress"));
+});
