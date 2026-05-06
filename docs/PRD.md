@@ -1,23 +1,23 @@
 # tokenpress
 
-Status: in-progress
-Decision: backlog
+Status: factory-mvp-complete
+Decision: ship locally, hold npm publish for human release review
 
 ## Scorecard
 
-Total: 0/100
-Band: public backlog
+Total: 76/100
+Band: factory MVP
 Last scored: 2026-05-02
 Scored by: Neo
 
 | Criterion | Points | Notes |
 |---|---:|---|
-| Problem pain | 0/20 | Needs qualification. |
-| Demand signal | 0/20 | Seed signal from source repo; needs independent validation. |
-| V1 buildability | 0/20 | Needs scoping pass. |
-| Differentiation | 0/15 | Renamed/reframed from adjacent inspiration. |
-| Agentic workflow leverage | 0/15 | Needs workflow fit assessment. |
-| Distribution potential | 0/10 | Needs demo/content angle. |
+| Problem pain | 16/20 | Agent/terminal transcripts routinely overflow useful context with command noise. |
+| Demand signal | 10/20 | Adjacent `tokenjuice` interest plus Roger workflow need; still needs independent usage. |
+| V1 buildability | 20/20 | Local deterministic CLI/library built with fixtures, tests, and smoke checks. |
+| Differentiation | 11/15 | Evidence-preserving reports, adapter hints, default redaction, no AI/network dependency. |
+| Agentic workflow leverage | 13/15 | Designed for handoff summaries, PR reviews, and session recovery. |
+| Distribution potential | 6/10 | Clear README examples and fixture demos; needs real-world examples post-release. |
 
 ## Pitch
 
@@ -31,7 +31,7 @@ This is a renamed backlog idea inspired by an external repo/activity signal. It 
 
 ### Pub Test
 
-Can this be explained clearly in one sentence to local-first or agentic-tooling developers? Needs validation.
+Can this be explained clearly in one sentence to local-first or agentic-tooling developers? Passes: "Squeezes noisy terminal/agent logs into small reports that keep commands, errors, paths, and decisions."
 
 ### Competitors / Adjacent Tools
 
@@ -43,18 +43,19 @@ Seed signal from the linked public repository list shared by Roger on 2026-05-02
 
 ### Real Problem
 
-Needs a qualification pass to separate durable workflow pain from novelty. Prefer local-first, testable, agent-useful slices.
+Long agent sessions and CI transcripts hide the handful of facts needed for handoff: what ran, what failed, where files live, and why a decision was made.
 
 ### V1 Buildability
 
-Likely buildable as a deterministic CLI/library/demo if scoped to fixtures, local files, and explicit external calls only.
+Built as a deterministic TypeScript CLI/library over local files/stdin with no external calls.
 
 ## V1 Scope
 
-- Parse terminal-heavy transcripts
-- Preserve commands, errors, file paths, and decisions
+- Parse terminal-heavy transcripts from files, directories, or stdin
+- Preserve commands, errors, file paths, decisions, and compact summary metrics
 - Emit compact Markdown/JSON summaries
-- Adapters for OpenClaw/Codex-style logs
+- Adapters for OpenClaw/Codex/plain logs
+- Redact common secret-looking values by default
 
 ## Out of Scope
 
@@ -67,12 +68,14 @@ Likely buildable as a deterministic CLI/library/demo if scoped to fixtures, loca
 ```bash
 tokenpress --help
 tokenpress inspect ./fixtures/sample --output ./out
+tokenpress fixtures/sample/codex.log --format json
+cat agent.log | tokenpress inspect --adapter openclaw
 ```
 
 ## Verification
 
-- Unit tests for fixture parsing and report generation.
-- CLI smoke test using local fixtures.
+- Unit tests for fixture parsing, report generation, redaction, and directory input.
+- CLI smoke test using local fixtures and real output files.
 - README with install, quickstart, safety notes, and source attribution.
 - No hidden network, credential, or publish behavior.
 
