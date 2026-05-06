@@ -23,11 +23,19 @@ export interface CommandBlock {
   nearbyErrors: EvidenceLine[];
 }
 
+export interface PressSummary {
+  failedCommands: number;
+  errorCount: number;
+  decisionCount: number;
+  pathCount: number;
+}
+
 export interface PressedTranscript {
   adapter: Exclude<AdapterName, "auto">;
   inputLines: number;
   keptLines: number;
   compressionRatio: number;
+  summary: PressSummary;
   commands: CommandBlock[];
   errors: EvidenceLine[];
   paths: string[];

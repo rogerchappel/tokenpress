@@ -12,6 +12,12 @@ export function renderMarkdown(result: PressedTranscript): string {
   lines.push(`- Evidence lines kept: ${result.keptLines}`);
   lines.push(`- Compression ratio: ${result.compressionRatio}`);
   lines.push("");
+  lines.push("## Summary", "");
+  lines.push(`- Failed commands: ${result.summary.failedCommands}`);
+  lines.push(`- Errors: ${result.summary.errorCount}`);
+  lines.push(`- Decisions: ${result.summary.decisionCount}`);
+  lines.push(`- Unique paths: ${result.summary.pathCount}`);
+  lines.push("");
   lines.push("## Commands", "");
   if (result.commands.length === 0) lines.push("- None found");
   for (const command of result.commands) {

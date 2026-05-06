@@ -13,6 +13,9 @@ test("pressTranscript preserves commands, errors, paths, and decisions", async (
   assert.ok(result.paths.includes("/Users/roger/dev/demo"));
   assert.ok(result.paths.includes("./out/tokenpress.md"));
   assert.ok(result.evidence.length < result.inputLines);
+  assert.equal(result.summary.failedCommands, 1);
+  assert.equal(result.summary.errorCount, result.errors.length);
+  assert.equal(result.summary.pathCount, result.paths.length);
 });
 
 test("pressTranscript redacts secret-looking values by default", () => {
@@ -25,6 +28,8 @@ test("renderMarkdown includes report sections", async () => {
   const input = await readFile("fixtures/sample/transcript.log", "utf8");
   const markdown = renderMarkdown(pressTranscript(input));
   assert.match(markdown, /# TokenPress Report/);
+  assert.match(markdown, /## Summary/);
+  assert.match(markdown, /Failed commands: 1/);
   assert.match(markdown, /## Commands/);
   assert.match(markdown, /## Evidence/);
 });
@@ -33,4 +38,11 @@ test("renderMarkdown includes report sections", async () => {
 test("optional path evidence keeps path-only lines", () => {
   const result = pressTranscript("plain line\nsee /tmp/tokenpress/report.md for output", { includePathEvidence: true });
   assert.ok(result.evidence.some((line) => line.reason === "path"));
+});
+
+
+test("evidence ranking avoids exact duplicate evidence entries", () => {
+  const result = pressTranscript("$ npm test\nError: failed because ./out/report.md was missing", { includePathEvidence: true });
+  const keys = result.evidence.map((line) => `${line.lineNumber}:${line.reason}:${line.text}`);
+  assert.equal(new Set(keys).size, keys.length);
 });
