@@ -40,6 +40,12 @@ Example Markdown output:
 - Input lines: 12
 - Evidence lines kept: 7
 
+## Summary
+- Failed commands: 1
+- Errors: 1
+- Decisions: 1
+- Unique paths: 2
+
 ## Commands
 - L2: `npm test` (exit 1)
 
@@ -63,7 +69,7 @@ Options:
 - `--path-evidence` — keep lines that only mention relevant paths.
 - `--no-redact` — keep secrets visible; useful only for private local debugging.
 
-Directory inputs look for `transcript.log`, `transcript.txt`, `sample.log`, or `sample.txt`. See `docs/adapters.md` for adapter details.
+Directory inputs prefer `transcript.log`, `transcript.txt`, `sample.log`, or `sample.txt`, then fall back to the first sorted `.log`/`.txt` file. See `docs/adapters.md` for adapter details.
 
 ## Library
 
@@ -76,7 +82,7 @@ console.log(renderMarkdown(pressed));
 
 ## Safety
 
-TokenPress reads only the path or stdin you provide. It does not upload logs, call LLMs, execute transcript commands, or phone home. Common secret-looking values are redacted by default.
+TokenPress reads only the path or stdin you provide. It does not upload logs, call LLMs, execute transcript commands, or phone home. Common secret-looking values are redacted by default, including GitHub/OpenAI-style tokens, bearer values, AWS access keys, npm tokens, emails, and `token=...`/`password=...` pairs.
 
 ## Attribution
 
