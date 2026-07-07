@@ -99,6 +99,18 @@ npm run smoke
 bash scripts/validate.sh
 ```
 
+## Release package check
+
+```bash
+npm run package:smoke
+npm run release:check
+```
+
+The package smoke builds the CLI, dry-runs the npm tarball, and verifies that
+the compiled CLI/API entrypoints, adapter docs, example report, and bundled
+sample transcripts are included. Keep this passing whenever package metadata,
+fixtures, or docs change.
+
 ## License
 
 MIT
