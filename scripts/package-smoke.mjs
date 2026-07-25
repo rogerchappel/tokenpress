@@ -1,4 +1,7 @@
 import { spawnSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 const run = (command, args) => {
   const result = spawnSync(command, args, {
@@ -16,7 +19,7 @@ const run = (command, args) => {
 
 run('npm', ['run', 'build']);
 
-const output = run('npm', ['pack', '--dry-run', '--json']);
+const output = run('npm', ['pack', '--json']);
 const [pack] = JSON.parse(output);
 const packed = new Set(pack.files.map((file) => file.path));
 const required = [
@@ -42,4 +45,30 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
-console.log(`Package tarball includes ${required.length} required release-candidate files.`);
+const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
+if (pack.name !== manifest.name || pack.version !== manifest.version) {
+  console.error(`Packed identity mismatch: expected ${manifest.name}@${manifest.version}, got ${pack.name}@${pack.version}`);
+  process.exit(1);
+}
+
+const sandbox = mkdtempSync(join(tmpdir(), 'tokenpress-package-smoke-'));
+try {
+  const tarball = join(process.cwd(), pack.filename);
+  run('npm', ['install', '--global', '--prefix', sandbox, tarball]);
+  const executable = join(sandbox, 'bin', 'tokenpress');
+  const version = run(executable, ['--version']).trim();
+  const help = run(executable, ['--help']);
+  if (version !== manifest.version) {
+    console.error(`Installed CLI version mismatch: expected ${manifest.version}, got ${version}`);
+    process.exit(1);
+  }
+  if (!help.includes('TokenPress —') || !help.includes('tokenpress inspect')) {
+    console.error('Installed CLI help does not identify this project.');
+    process.exit(1);
+  }
+} finally {
+  rmSync(sandbox, { recursive: true, force: true });
+  rmSync(pack.filename, { force: true });
+}
+
+console.log(`Packed and invoked ${manifest.name}@${manifest.version}; ${required.length} required files are present.`);

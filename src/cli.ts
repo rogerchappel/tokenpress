@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { realpathSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { readInput, writeOutput } from "./io.js";
 import { pressTranscript } from "./press.js";
 import { renderJson, renderMarkdown } from "./render.js";
@@ -116,7 +118,10 @@ export async function run(argv = process.argv.slice(2)): Promise<number> {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+const isEntrypoint = process.argv[1]
+  && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+
+if (isEntrypoint) {
   run().then((code) => {
     process.exitCode = code;
   });
