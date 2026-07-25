@@ -2,6 +2,8 @@
 
 ## 0.1.0 - Unreleased
 
+- Use the collision-free internal identity `@rogerchappel/tokenpress` and
+  distribute through GitHub Releases; the `tokenpress` CLI name is unchanged.
 - Add local-first `tokenpress inspect` CLI.
 - Add deterministic transcript pressing library API.
 - Preserve commands, errors, paths, decisions, and ranked evidence.

@@ -1,6 +1,7 @@
 {
-  "name": "tokenpress",
+  "name": "@rogerchappel/tokenpress",
   "version": "0.1.0",
+  "private": true,
   "description": "Local-first terminal transcript compactor for agent logs that preserves commands, errors, paths, and decisions.",
   "type": "module",
   "bin": {
@@ -58,6 +59,9 @@
     "url": "https://github.com/rogerchappel/tokenpress/issues"
   },
   "homepage": "https://github.com/rogerchappel/tokenpress#readme",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "sideEffects": false,
   "packageManager": "npm@11.6.2"
 }
