@@ -10,9 +10,17 @@ Agent sessions and CI logs get huge fast. Most of the useful context is not pros
 
 ## Install
 
+TokenPress is distributed through this repository's GitHub releases, not the
+npm registry. The unscoped `tokenpress` name on npm belongs to another project;
+do not use `npm install -g tokenpress`.
+
 ```bash
-npm install -g tokenpress
+npm install -g https://github.com/rogerchappel/tokenpress/releases/download/v0.1.0/rogerchappel-tokenpress-0.1.0.tgz
+tokenpress --version
 ```
+
+The installed executable remains `tokenpress`. Replace `v0.1.0` in both URL
+segments when installing a newer release.
 
 For local development:
 
@@ -74,7 +82,7 @@ Directory inputs prefer `transcript.log`, `transcript.txt`, `sample.log`, or `sa
 ## Library
 
 ```js
-import { pressTranscript, renderMarkdown } from "tokenpress";
+import { pressTranscript, renderMarkdown } from "@rogerchappel/tokenpress";
 
 const pressed = pressTranscript(logText, { adapter: "openclaw" });
 console.log(renderMarkdown(pressed));
@@ -106,10 +114,9 @@ npm run package:smoke
 npm run release:check
 ```
 
-The package smoke builds the CLI, dry-runs the npm tarball, and verifies that
-the compiled CLI/API entrypoints, adapter docs, example report, and bundled
-sample transcripts are included. Keep this passing whenever package metadata,
-fixtures, or docs change.
+The package smoke builds a real npm tarball, installs it into a temporary
+prefix, invokes the packaged `tokenpress` executable, verifies its version and
+help output, and checks the release-candidate file set. It does not publish.
 
 ## License
 
