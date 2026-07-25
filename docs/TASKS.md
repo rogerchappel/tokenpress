@@ -24,4 +24,5 @@
 - [ ] Add richer OpenClaw JSONL parsing when stable sample logs are available.
 - [ ] Add configurable scoring profiles for CI logs, agent logs, and support logs.
 - [ ] Add HTML report output after the Markdown/JSON API settles.
-- [ ] Publish npm package only after human review and release tagging.
+- [ ] Keep npm publishing disabled; distribute signed-off tarballs through
+      GitHub Releases only unless a maintainer explicitly changes policy.

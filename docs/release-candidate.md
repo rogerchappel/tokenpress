@@ -18,6 +18,10 @@ The branch records the local release-readiness gate results requested for this r
 
 ## Reviewer checklist
 
+- [ ] Confirm `npm view @rogerchappel/tokenpress version` still returns E404;
+      this collision-free identity is reserved in metadata but is not published.
+- [ ] Confirm the unscoped `tokenpress` registry package is still unrelated and
+      no documentation recommends installing it.
 - [ ] Confirm package metadata and repository links are correct.
 - [ ] Confirm README/usage docs match the current CLI/API surface.
 - [ ] Confirm release notes/changelog are ready for the intended version.
