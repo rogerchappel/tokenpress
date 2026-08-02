@@ -32,7 +32,8 @@
     "test": "npm run build && node --test tests/*.test.mjs",
     "smoke": "npm run build && bash scripts/smoke.sh",
     "package:smoke": "node scripts/package-smoke.mjs",
-    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke"
+    "release:asset": "node scripts/release-asset.mjs",
+    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke && npm run release:asset"
   },
   "keywords": [
     "agent-logs",
