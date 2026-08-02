@@ -36,10 +36,14 @@ jobs:
       - name: Run release checks
         run: npm run release:check
       - name: Build GitHub release package
-        run: npm pack
+        id: package
+        run: |
+          asset=$(npm pack --json | node -e "let input=''; process.stdin.on('data', chunk => input += chunk); process.stdin.on('end', () => console.log(JSON.parse(input)[0].filename))")
+          node scripts/release-asset.mjs "$asset" | tee -a "$GITHUB_OUTPUT"
+          echo "Install command: npm install -g ${{ github.server_url }}/${{ github.repository }}/releases/download/${{ github.ref_name }}/$asset" >> "$GITHUB_STEP_SUMMARY"
       - name: Generate release notes
         run: node /tmp/releasebox/bin/releasebox.js notes . > RELEASE_NOTES.md
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md *.tgz
+        run: gh release create "${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md "${{ steps.package.outputs.asset }}"

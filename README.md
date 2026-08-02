@@ -15,12 +15,14 @@ npm registry. The unscoped `tokenpress` name on npm belongs to another project;
 do not use `npm install -g tokenpress`.
 
 ```bash
-npm install -g https://github.com/rogerchappel/tokenpress/releases/download/v0.1.0/rogerchappel-tokenpress-0.1.0.tgz
+npm install -g https://github.com/rogerchappel/tokenpress/releases/download/v0.1.0/tokenpress-0.1.0.tgz
 tokenpress --version
 ```
 
-The installed executable remains `tokenpress`. Replace `v0.1.0` in both URL
-segments when installing a newer release.
+The installed executable remains `tokenpress`. Release v0.1.0 predates the
+scoped package identity and its asset is named `tokenpress-0.1.0.tgz`. Starting
+with the next release, npm's scoped-package filename is used; for example,
+v0.2.0 will be `rogerchappel-tokenpress-0.2.0.tgz`.
 
 For local development:
 
