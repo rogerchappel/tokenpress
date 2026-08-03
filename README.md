@@ -119,6 +119,9 @@ npm run release:check
 The package smoke builds a real npm tarball, installs it into a temporary
 prefix, invokes the packaged `tokenpress` executable, verifies its version and
 help output, and checks the release-candidate file set. It does not publish.
+In GitHub Actions, `release:check` validates the package version against the
+current ref only when `GITHUB_REF_TYPE` is `tag`; branch and pull-request refs
+still run every other release-readiness check without being mistaken for tags.
 
 ## License
 
