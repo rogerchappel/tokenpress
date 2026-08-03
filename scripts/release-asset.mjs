@@ -25,14 +25,22 @@ export function verifyPackedFilename(actual, name, version) {
   return expected;
 }
 
+export function verifyReleaseTag(refName, refType, version) {
+  // GITHUB_REF_NAME is also populated for branches and pull-request merge refs.
+  // Only a tag-triggered workflow is a release context that must match package.json.
+  if (refType !== 'tag') return;
+
+  const expected = `v${version}`;
+  if (refName !== expected) {
+    throw new Error(`Release tag mismatch: expected ${expected}, got ${refName || '(absent)'}`);
+  }
+}
+
 function main() {
   const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
   verifyReadmeInstall(readFileSync('README.md', 'utf8'), manifest.name, manifest.version);
 
-  const releaseTag = process.env.GITHUB_REF_NAME;
-  if (releaseTag && releaseTag !== `v${manifest.version}`) {
-    throw new Error(`Release tag mismatch: expected v${manifest.version}, got ${releaseTag}`);
-  }
+  verifyReleaseTag(process.env.GITHUB_REF_NAME, process.env.GITHUB_REF_TYPE, manifest.version);
 
   const packedFilename = process.argv[2];
   if (packedFilename) {

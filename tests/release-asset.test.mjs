@@ -4,7 +4,8 @@ import {
   releaseAssetFilename,
   releaseInstallUrl,
   verifyPackedFilename,
-  verifyReadmeInstall
+  verifyReadmeInstall,
+  verifyReleaseTag
 } from '../scripts/release-asset.mjs';
 
 test('preserves the filename of the existing v0.1.0 release asset', () => {
@@ -12,6 +13,17 @@ test('preserves the filename of the existing v0.1.0 release asset', () => {
   assert.equal(
     releaseInstallUrl('@rogerchappel/tokenpress', '0.1.0'),
     'https://github.com/rogerchappel/tokenpress/releases/download/v0.1.0/tokenpress-0.1.0.tgz'
+  );
+});
+
+test('validates versions only in an explicit tag context', () => {
+  assert.doesNotThrow(() => verifyReleaseTag(undefined, undefined, '0.1.0'));
+  assert.doesNotThrow(() => verifyReleaseTag('main', 'branch', '0.1.0'));
+  assert.doesNotThrow(() => verifyReleaseTag('10/merge', 'branch', '0.1.0'));
+  assert.doesNotThrow(() => verifyReleaseTag('v0.1.0', 'tag', '0.1.0'));
+  assert.throws(
+    () => verifyReleaseTag('v0.2.0', 'tag', '0.1.0'),
+    /Release tag mismatch: expected v0\.1\.0, got v0\.2\.0/
   );
 });
 
