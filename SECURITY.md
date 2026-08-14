@@ -22,6 +22,6 @@ Include:
 - No telemetry or hidden network calls.
 - No execution of commands found inside transcripts.
 - No recursive filesystem scan unless explicitly added in a future reviewed release.
-- Default redaction for common token, API key, password, authorization, and email patterns.
+- Default redaction for common token, API key, password, authorization, and email patterns. Key/value assignments support unquoted, single-quoted, and double-quoted values, preserving matching quote delimiters around the replacement.
 
 `--no-redact` disables redaction and should only be used for private local debugging.

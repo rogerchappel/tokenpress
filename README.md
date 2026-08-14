@@ -92,7 +92,7 @@ console.log(renderMarkdown(pressed));
 
 ## Safety
 
-TokenPress reads only the path or stdin you provide. It does not upload logs, call LLMs, execute transcript commands, or phone home. Common secret-looking values are redacted by default, including GitHub/OpenAI-style tokens, bearer values, AWS access keys, npm tokens, emails, and `token=...`/`password=...` pairs.
+TokenPress reads only the path or stdin you provide. It does not upload logs, call LLMs, execute transcript commands, or phone home. Common secret-looking values are redacted by default, including GitHub/OpenAI-style tokens, bearer values, AWS access keys, npm tokens, and emails. Assignments whose keys are `token`, `password`, `passwd`, `secret`, `api_key`/`api-key`, or `authorization` are also redacted when their values are unquoted, single-quoted, or double-quoted; matching quote delimiters are preserved in the report.
 
 ## Attribution
 
