@@ -24,6 +24,28 @@ test("pressTranscript redacts secret-looking values by default", () => {
   assert.doesNotMatch(JSON.stringify(result), /supersecretvalue/);
 });
 
+test("redactLine preserves quotes while redacting quoted assignments", () => {
+  const doubleQuotedSecret = "double-quoted-token-value";
+  const singleQuotedSecret = "single-quoted-password-value";
+  const redacted = redactLine(`token="${doubleQuotedSecret}" password='${singleQuotedSecret}'`);
+
+  assert.equal(redacted, `token="[redacted-secret]" password='[redacted-secret]'`);
+  assert.doesNotMatch(redacted, new RegExp(doubleQuotedSecret));
+  assert.doesNotMatch(redacted, new RegExp(singleQuotedSecret));
+});
+
+test("rendered reports redact both quote styles", () => {
+  const doubleQuotedSecret = "rendered-double-quoted-token";
+  const singleQuotedSecret = "rendered-single-quoted-password";
+  const input = `$ deploy --token="${doubleQuotedSecret}" --password='${singleQuotedSecret}'`;
+  const markdown = renderMarkdown(pressTranscript(input));
+
+  assert.match(markdown, /--token="\[redacted-secret\]"/);
+  assert.match(markdown, /--password='\[redacted-secret\]'/);
+  assert.doesNotMatch(markdown, new RegExp(doubleQuotedSecret));
+  assert.doesNotMatch(markdown, new RegExp(singleQuotedSecret));
+});
+
 test("renderMarkdown includes report sections", async () => {
   const input = await readFile("fixtures/sample/transcript.log", "utf8");
   const markdown = renderMarkdown(pressTranscript(input));
