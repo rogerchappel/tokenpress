@@ -36,6 +36,6 @@ export function extractPaths(line: string): string[] {
 }
 
 export function extractExitCode(line: string): number | undefined {
-  const match = /(?:exit(?:ed)?(?: with)? code|status)\s*[:=]?\s*(\d+)/i.exec(line);
+  const match = /\bexit(?:ed)?(?:\s+with)?\s+code\s*[:=]?\s*(\d+)\b/i.exec(line);
   return match?.[1] ? Number(match[1]) : undefined;
 }
