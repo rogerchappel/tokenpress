@@ -81,6 +81,8 @@ Options:
 
 Directory inputs prefer `transcript.log`, `transcript.txt`, `sample.log`, or `sample.txt`, then fall back to the first sorted `.log`/`.txt` file. See `docs/adapters.md` for adapter details.
 
+Command exit codes are attached to the latest detected command only when a line explicitly says `exit code`, `exited code`, or `exited with code`. General application and HTTP `status` lines are preserved as ordinary transcript content and are not treated as process results.
+
 ## Library
 
 ```js
