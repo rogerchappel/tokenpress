@@ -24,6 +24,32 @@ test("pressTranscript redacts secret-looking values by default", () => {
   assert.doesNotMatch(JSON.stringify(result), /supersecretvalue/);
 });
 
+test("pressTranscript attributes explicit command completion exit codes", () => {
+  const result = pressTranscript([
+    "$ npm test",
+    "Command exited with code 1",
+    "$ npm run check",
+    "Process exit code: 0"
+  ].join("\n"));
+
+  assert.deepEqual(result.commands.map(({ command, exitCode }) => ({ command, exitCode })), [
+    { command: "npm test", exitCode: 1 },
+    { command: "npm run check", exitCode: 0 }
+  ]);
+});
+
+test("pressTranscript ignores application and HTTP status codes", () => {
+  const result = pressTranscript([
+    "$ npm test",
+    "HTTP response status: 404",
+    "Application status 503",
+    "Request completed with status=200"
+  ].join("\n"));
+
+  assert.equal(result.commands[0]?.exitCode, undefined);
+  assert.equal(result.commands.filter((command) => command.exitCode !== undefined).length, 0);
+});
+
 test("redactLine preserves quotes while redacting quoted assignments", () => {
   const doubleQuotedSecret = "double-quoted-token-value";
   const singleQuotedSecret = "single-quoted-password-value";
