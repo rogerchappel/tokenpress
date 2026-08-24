@@ -72,7 +72,7 @@ function parseArgs(argv: string[]): CliOptions | "help" | "version" {
     }
     if (arg === "--output" || arg === "-o") {
       const value = args.shift();
-      if (!value) throw new Error(`${arg} requires a path`);
+      if (!value || value.startsWith("-")) throw new Error(`${arg} requires a path`);
       options.output = value;
       continue;
     }
