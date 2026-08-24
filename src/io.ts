@@ -33,7 +33,13 @@ export async function readInput(path?: string): Promise<string> {
 export async function writeOutput(target: string | undefined, format: OutputFormat, content: string): Promise<string | undefined> {
   if (!target) return undefined;
   const extension = format === "json" ? ".json" : ".md";
-  const looksLikeFile = extname(target) !== "" || basename(target).includes(".");
+  let isExistingDirectory = false;
+  try {
+    isExistingDirectory = (await stat(target)).isDirectory();
+  } catch {
+    // A missing target is classified by its path shape below.
+  }
+  const looksLikeFile = !isExistingDirectory && (extname(target) !== "" || basename(target).includes("."));
   const filePath = looksLikeFile ? target : join(target, `tokenpress${extension}`);
   await mkdir(looksLikeFile ? dirname(filePath) : target, { recursive: true });
   await writeFile(filePath, content, "utf8");
