@@ -38,6 +38,40 @@ test("pressTranscript attributes explicit command completion exit codes", () => 
   ]);
 });
 
+test("pressTranscript ignores Markdown headings and comment prose as commands", () => {
+  const result = pressTranscript([
+    "# Deployment notes",
+    "## Summary",
+    "  # ordinary operator comment",
+    "All checks passed: 0 errors"
+  ].join("\n"));
+
+  assert.deepEqual(result.commands, []);
+  assert.doesNotMatch(renderMarkdown(result), /`Deployment notes`|`Summary`|`ordinary operator comment`/);
+});
+
+test("pressTranscript preserves supported shell prompt forms", () => {
+  const result = pressTranscript([
+    "$ npm test",
+    "❯ npm run check",
+    "root@build:/srv/app# npm run build",
+    "roger@devbox ~/tokenpress$ npm run smoke",
+    "command: npm pack",
+    "cmd> node dist/cli.js --help",
+    "shell: git diff --check"
+  ].join("\n"));
+
+  assert.deepEqual(result.commands.map(({ command }) => command), [
+    "npm test",
+    "npm run check",
+    "npm run build",
+    "npm run smoke",
+    "npm pack",
+    "node dist/cli.js --help",
+    "git diff --check"
+  ]);
+});
+
 test("pressTranscript ignores application and HTTP status codes", () => {
   const result = pressTranscript([
     "$ npm test",
