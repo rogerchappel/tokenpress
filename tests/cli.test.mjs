@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -31,6 +31,44 @@ test("cli emits json to stdout", () => {
   assert.equal(result.status, 0, result.stderr);
   const parsed = JSON.parse(result.stdout);
   assert.equal(parsed.adapter, "codex");
+});
+
+for (const option of ["--output", "-o"]) {
+  test(`${option} rejects a missing path`, () => {
+    const result = spawnSync(process.execPath, [...cli, "fixtures/sample/codex.log", option, "--format", "json"], { encoding: "utf8" });
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, new RegExp(`tokenpress: ${option} requires a path`));
+    assert.doesNotMatch(result.stderr, /ENOENT/);
+  });
+}
+
+for (const format of ["markdown", "json"]) {
+  test(`cli writes ${format} report inside an existing dotted directory`, async () => {
+    const root = await mkdtemp(join(tmpdir(), "tokenpress-"));
+    const dir = join(root, "reports.v1");
+    await mkdir(dir);
+    try {
+      const result = spawnSync(process.execPath, [...cli, "fixtures/sample/codex.log", "--format", format, "--output", dir], { encoding: "utf8" });
+      assert.equal(result.status, 0, result.stderr);
+      const report = await readFile(join(dir, `tokenpress.${format === "json" ? "json" : "md"}`), "utf8");
+      if (format === "json") assert.equal(JSON.parse(report).adapter, "codex");
+      else assert.match(report, /TokenPress Report/);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+}
+
+test("cli retains explicit output file behavior", async () => {
+  const root = await mkdtemp(join(tmpdir(), "tokenpress-"));
+  const file = join(root, "custom-report.json");
+  try {
+    const result = spawnSync(process.execPath, [...cli, "fixtures/sample/codex.log", "--format", "json", "-o", file], { encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(JSON.parse(await readFile(file, "utf8")).adapter, "codex");
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 
