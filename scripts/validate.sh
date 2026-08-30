@@ -36,6 +36,23 @@ check_dir() {
   fi
 }
 
+check_agents_metadata() {
+  local expected
+
+  for expected in \
+    '- Repository: `https://github.com/rogerchappel/tokenpress`' \
+    '- Primary maintainer: `Roger Chappel`' \
+    '- Default branch: `main`' \
+    '- Package manager: `npm`' \
+    '- Branch from the latest `main` before editing.'; do
+    if grep -Fqx -- "$expected" AGENTS.md; then
+      pass "AGENTS.md contains: $expected"
+    else
+      fail "AGENTS.md missing canonical metadata: $expected"
+    fi
+  done
+}
+
 run_check() {
   local label="$1"
   shift
@@ -128,6 +145,7 @@ check_file "CONTRIBUTING.md"
 check_file "SECURITY.md"
 check_file ".github/pull_request_template.md"
 check_file "scripts/validate.sh"
+check_agents_metadata
 
 printf '\nChecking tokenpress required directories...\n'
 
