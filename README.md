@@ -83,7 +83,7 @@ Directory inputs prefer `transcript.log`, `transcript.txt`, `sample.log`, or `sa
 
 Command exit codes are attached to the latest detected command only when a line explicitly says `exit code`, `exited code`, or `exited with code`. General application and HTTP `status` lines are preserved as ordinary transcript content and are not treated as process results.
 
-Command detection recognizes `$` and `❯` prompts, contextual shell prompts such as `root@build:/srv/app#` and `roger@devbox ~/project$`, and explicit `command:`, `cmd>`, or `shell:` prefixes. A bare `#` line is treated as Markdown or comment text, not as a root-shell prompt; include the shell context when preserving root commands in a transcript.
+Command detection recognizes `$` and `❯` prompts, contextual `user@host` shell prompts such as `root@build:/srv/app#` and `roger@devbox ~/project$`, and explicit `command:`, `cmd>`, or `shell:` prefixes. A bare `#` line, or ordinary prose containing `#` or `$`, is not a command; include the `user@host` shell context when preserving root commands in a transcript. Markdown reports wrap commands and transcript evidence in variable-length code spans, so embedded backticks, headings, and emphasis markers remain literal.
 
 ## Library
 

@@ -4,6 +4,13 @@ function list(values: string[]): string {
   return values.length === 0 ? "- None found" : values.map((value) => `- ${value}`).join("\n");
 }
 
+function codeSpan(value: string): string {
+  const longestRun = Math.max(0, ...Array.from(value.matchAll(/`+/g), (match) => match[0].length));
+  const fence = "`".repeat(longestRun + 1);
+  const padding = /(^`|`$|^\s|\s$)/.test(value) ? " " : "";
+  return `${fence}${padding}${value}${padding}${fence}`;
+}
+
 export function renderMarkdown(result: PressedTranscript): string {
   const lines: string[] = [];
   lines.push("# TokenPress Report", "");
@@ -22,18 +29,18 @@ export function renderMarkdown(result: PressedTranscript): string {
   if (result.commands.length === 0) lines.push("- None found");
   for (const command of result.commands) {
     const suffix = command.exitCode === undefined ? "" : ` (exit ${command.exitCode})`;
-    lines.push(`- L${command.lineNumber}: \`${command.command}\`${suffix}`);
+    lines.push(`- L${command.lineNumber}: ${codeSpan(command.command)}${suffix}`);
   }
   lines.push("", "## Errors", "");
-  lines.push(list(result.errors.map((item) => `L${item.lineNumber}: ${item.text}`)));
+  lines.push(list(result.errors.map((item) => `L${item.lineNumber}: ${codeSpan(item.text)}`)));
   lines.push("", "## Decisions", "");
-  lines.push(list(result.decisions.map((item) => `L${item.lineNumber}: ${item.text}`)));
+  lines.push(list(result.decisions.map((item) => `L${item.lineNumber}: ${codeSpan(item.text)}`)));
   lines.push("", "## Paths", "");
-  lines.push(list(result.paths));
+  lines.push(list(result.paths.map(codeSpan)));
   lines.push("", "## Evidence", "");
-  lines.push(list(result.evidence.map((item) => `L${item.lineNumber} [${item.reason}]: ${item.text}`)));
+  lines.push(list(result.evidence.map((item) => `L${item.lineNumber} [${item.reason}]: ${codeSpan(item.text)}`)));
   if (result.warnings.length > 0) {
-    lines.push("", "## Warnings", "", list(result.warnings));
+    lines.push("", "## Warnings", "", list(result.warnings.map(codeSpan)));
   }
   return `${lines.join("\n")}\n`;
 }
