@@ -72,6 +72,30 @@ test("pressTranscript preserves supported shell prompt forms", () => {
   ]);
 });
 
+test("pressTranscript rejects prompt characters embedded in ordinary prose", () => {
+  const result = pressTranscript([
+    "Decision: use # heading",
+    "Price is $ 10 per month",
+    "release # npm publish",
+    "root@build:/srv/app# npm run build"
+  ].join("\n"));
+
+  assert.deepEqual(result.commands.map(({ command }) => command), ["npm run build"]);
+});
+
+test("renderMarkdown preserves transcript values as literal code spans", () => {
+  const markdown = renderMarkdown(pressTranscript([
+    "$ echo `unsafe` **bold**",
+    "Error: failed **bold** at ./a`b.md",
+    "Decision: keep # heading"
+  ].join("\n"), { includePathEvidence: true }));
+
+  assert.match(markdown, /``echo `unsafe` \*\*bold\*\*``/);
+  assert.match(markdown, /`Error: failed \*\*bold\*\* at \.\/a`b\.md`/);
+  assert.match(markdown, /`Decision: keep # heading`/);
+  assert.doesNotMatch(markdown, /^# heading$/m);
+});
+
 test("pressTranscript ignores application and HTTP status codes", () => {
   const result = pressTranscript([
     "$ npm test",
