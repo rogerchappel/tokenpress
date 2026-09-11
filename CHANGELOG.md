@@ -11,3 +11,4 @@
 - Add OpenClaw, Codex, and plain transcript adapter hints.
 - Redact common secret-looking values by default.
 - Add fixture-backed tests, smoke script, and validation docs.
+- Keep the README quickstart example verified by a test against the live `fixtures/sample` inspect output.
