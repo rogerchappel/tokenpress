@@ -47,20 +47,49 @@ Example Markdown output:
 # TokenPress Report
 
 - Adapter: openclaw
-- Input lines: 12
-- Evidence lines kept: 7
+- Input lines: 14
+- Evidence lines kept: 6
+- Compression ratio: 0.429
 
 ## Summary
+
 - Failed commands: 1
-- Errors: 1
-- Decisions: 1
-- Unique paths: 2
+- Errors: 2
+- Decisions: 2
+- Unique paths: 6
 
 ## Commands
+
 - L2: `npm test` (exit 1)
+- L10: `npm run build`
 
 ## Errors
-- L6: Error: expected report at ./out/tokenpress.md
+
+- L7: `Error: expected report at ./out/tokenpress.md`
+- L11: `src/cli.ts:12:7 - error TS2322: Type 'string' is not assignable to type 'OutputFormat'.`
+
+## Decisions
+
+- L9: `Decision: keep V1 local-first and write markdown/json only.`
+- L12: `TODO: preserve /tmp/demo/transcript.log and docs/PRD.md references.`
+
+## Paths
+
+- `./out/tokenpress.md`
+- `/tmp/demo/transcript.log`
+- `/Users/roger/dev/demo`
+- `docs/PRD.md`
+- `markdown/json`
+- `src/cli.ts:12:7`
+
+## Evidence
+
+- L2 [command]: `$ npm test`
+- L7 [error]: `Error: expected report at ./out/tokenpress.md`
+- L9 [decision]: `Decision: keep V1 local-first and write markdown/json only.`
+- L10 [command]: `$ npm run build`
+- L11 [error]: `src/cli.ts:12:7 - error TS2322: Type 'string' is not assignable to type 'OutputFormat'.`
+- L12 [decision]: `TODO: preserve /tmp/demo/transcript.log and docs/PRD.md references.`
 ```
 
 ## CLI
