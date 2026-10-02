@@ -170,3 +170,16 @@ test("agent-session fixture captures failed command and decision", async () => {
   assert.ok(result.decisions.some((line) => line.text.includes("local-first")));
   assert.ok(result.paths.includes("/Users/roger/dev/tokenpress"));
 });
+
+test("scoreReason assigns stable weights to recognized and unknown evidence reasons", async () => {
+  const { scoreReason } = await import("../dist/score.js");
+
+  assert.deepEqual(
+    ["command", "error", "decision", "path", "unknown"].map(scoreReason),
+    [100, 95, 80, 45, 10]
+  );
+  assert.ok(scoreReason("command") > scoreReason("error"));
+  assert.ok(scoreReason("error") > scoreReason("decision"));
+  assert.ok(scoreReason("decision") > scoreReason("path"));
+  assert.ok(scoreReason("path") > scoreReason("unknown"));
+});
